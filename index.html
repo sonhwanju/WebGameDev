@@ -12,6 +12,7 @@
         <canvas id="gameCanvas" width="960" height="480"></canvas>
     </div>
     <button id="startBtn" class="btn">게임시작</button>
+    <input type="color" id="colorPicker">
 
     <script>
         let btn = document.querySelector("#startBtn");
@@ -23,16 +24,49 @@
 
         let ctx = canvas.getContext("2d");
 
-        ctx.strokeStyle = "rgba(255,0,0,0.5)";
+        let cp = document.querySelector("#colorPicker");
+
+        /*canvas.addEventListener("click", function(e) {
+            //console.log(cp.value);
+            //console.log(e.offsetX,e.offsetY);
+            ctx.fillStyle = cp.value;
+            ctx.fillRect(e.offsetX,e.offsetY,10,10);
+        });*/
+
+        canvas.addEventListener("mousedown", function(e){
+
+        });
+        
+        canvas.addEventListener("mouseup", function(e){
+
+        });
+
+        canvas.addEventListener("mousemove", function(e){
+
+        });
+
+
+
+        /*ctx.strokeStyle = "rgba(255,0,0,0.5)";
         ctx.strokeRect(20, 20, 100, 100);
         ctx.fillStyle = "rgba(0, 255, 0, 0.5)";
         ctx.fillRect(150, 20, 100, 100);
 
         ctx.beginPath();
-        ctx.moveTo(120,120);
-        ctx.lineTo(200,130);
-        ctx.lineTo(200,180);
-        ctx.stroke();
+        ctx.moveTo(250,250);
+        ctx.lineTo(360,100);
+        ctx.lineTo(480,250);
+        ctx.moveTo(600,250);
+        ctx.lineTo(700,100);
+        ctx.lineTo(820,250);
+        ctx.moveTo(600,400);
+        ctx.lineTo(300,360);
+        ctx.lineTo(560,600);
+        ctx.moveTo(100,100);
+
+
+        ctx.closePath();
+        ctx.stroke();*/
         
     </script>
 </body>
