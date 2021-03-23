@@ -33,6 +33,8 @@
         let drawCheck = document.querySelector("#drawRadio");
         let removeCheck = document.querySelector("#removeRadio");
 
+        let drawCheck2 = document.querySelector('input[name="mode"]:checked').value;
+
         let isDown = false;
         let x = 0;
         let y = 0;
@@ -58,28 +60,41 @@
 
         canvas.addEventListener("mousemove", function(e){
             if(!isDown) return;
-            if(drawCheck.value == on)
-            {
-                ctx.lineWidth = num.value;
-            ctx.strokeStyle = cp.value;
-            ctx.beginPath();
-            ctx.moveTo(x,y);
-            ctx.lineTo(e.offsetX,e.offsetY);
-            ctx.stroke();
 
-            }
-            else {
+            if(document.getElementById('drawRadio').checked) {
+                //Male radio button is checked
+                ctx.lineWidth = num.value;
+                ctx.strokeStyle = cp.value;
+                ctx.beginPath();
+                ctx.moveTo(x,y);
+                ctx.lineTo(e.offsetX,e.offsetY);
+                ctx.stroke();
+            }else if(document.getElementById('removeRadio').checked) {
+                //Female radio button is checked
                 ctx.beginPath();
                 ctx.moveTo(x,y);
                 ctx.lineTo(e.offsetX,e.offsetY);
                 ctx.clearRect(x,y,5,5);
             }
 
+            // if()
+            // {
+            //     ctx.lineWidth = num.value;
+            //     ctx.strokeStyle = cp.value;
+            //     ctx.beginPath();
+            //     ctx.moveTo(x,y);
+            //     ctx.lineTo(e.offsetX,e.offsetY);
+            //     ctx.stroke();
 
-            
+            // }
+            // else {
+            //     ctx.beginPath();
+            //     ctx.moveTo(x,y);
+            //     ctx.lineTo(e.offsetX,e.offsetY);
+            //     ctx.clearRect(x,y,5,5);
+            // }
+
             //ctx.clearRect(x,y,5,5);
-            
-            
             x = e.offsetX;
             y = e.offsetY;
         });
