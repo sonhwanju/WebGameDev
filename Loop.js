@@ -14,6 +14,9 @@ let ey = 60;
 let eWidth = 30;
 let eHeight = 100;
 
+let img = new Image();
+img.src = "player.jpg";
+
 let keyArr = [];
 
 document.addEventListener("keydown", function(e) {
@@ -80,7 +83,7 @@ function render()
 {
     ctx.clearRect(0,0,960,480);
     ctx.fillStyle = "rgba(0,255,0,1)";
-    ctx.fillRect(x,y,width,height);
+    ctx.drawImage(img,x,y,width,height);
 
     //적을 그리기전에
     ctx.fillStyle = "rgba(255, 0, 0, 1)";
