@@ -4,7 +4,16 @@ let ctx = canvas.getContext("2d");
 
 let x = 0;
 let y = 0;
-let speed = 200;
+let speed = 300;
+
+let width = 40;
+let height = 40;
+
+let ex = 200;
+let ey = 60;
+let eWidth = 30;
+let eHeight = 100;
+
 let keyArr = [];
 
 document.addEventListener("keydown", function(e) {
@@ -31,28 +40,51 @@ document.addEventListener("keyup", function(e) {
     keyArr[e.keyCode] = false;
 });
 
-
+let eDerection = 1;
 function update()
 {
-    if(keyArr[37]) {
-        x -= speed * 1/60;
-    }
-    if(keyArr[38]) {
-        y-= speed * 1/60;
-    }
-    if(keyArr[39]) {
-        x+= speed * 1/60;
-    }
-    if(keyArr[40]) {
-        y+= speed * 1/60;
-    }
+        //좌표저장
+        let beforeX = x;
+        let beforeY = y;
+
+        if(keyArr[37] && x > 0) {
+            x -= speed * 1/60;
+        }
+        if(keyArr[38] && y > 0) {
+            y-= speed * 1/60;
+        }
+        if(keyArr[39] && x < 960 - width) {
+            x+= speed * 1/60;
+        }
+        if(keyArr[40] && y < 480 - height) {
+            y+= speed * 1/60;
+        }
+        
+
+        //적이랑 충돌했는지 검사
+        if((x < ex+eWidth && y < ey+eHeight && x+width > ex && y+height > ey)) {
+            x = beforeX;
+            y = beforeY;
+        }
+
+        if(ey+eHeight > 480) {
+            eDerection = -1;
+        }else if (ey<0){
+            eDerection = 1;
+        }
+        ey+= eDerection*10;
 
 }
 
 function render() 
 {
     ctx.clearRect(0,0,960,480);
-    ctx.fillRect(x,y,10,10);
+    ctx.fillStyle = "rgba(0,255,0,1)";
+    ctx.fillRect(x,y,width,height);
+
+    //적을 그리기전에
+    ctx.fillStyle = "rgba(255, 0, 0, 1)";
+    ctx.fillRect(ex, ey, eWidth, eHeight);
 }
 
 setInterval(function(){
