@@ -63,8 +63,8 @@ function update()
 
         //적이랑 충돌했는지 검사
         if((x < ex+eWidth && y < ey+eHeight && x+width > ex && y+height > ey)) {
-            x = beforeX;
-            y = beforeY;
+            x = 0;
+            y = 0;
         }
 
         if(ey+eHeight > 480) {
