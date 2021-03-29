@@ -5,8 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel = "stylesheet" href="/app.css">  
 </head>
 <body>
         <canvas id="gameCanvas" width="500" height="800"></canvas>
+        <script src ="InputSystem.js"></script>
+        <script src = "Player.js"></script>
+        <script src = "Game.js"></script>
+        <script>
+            let canvas = document.querySelector("#gameCanvas");
+            let game = new Game(canvas);
+        </script>
 </body>
 </html>
