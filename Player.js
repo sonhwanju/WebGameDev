@@ -19,7 +19,13 @@ class Player {
         }
     }
     render(ctx) {
-        ctx.clearRect(0,0,500,800);
         ctx.drawImage(this.sprite, this.x, this.y, this.w, this.h);
+    }
+
+    checkCol(poop) {
+        let px = this.x + this.w / 2;
+        let py = this.y + this.h / 2;
+        let d = Math.sqrt((poop.x - px) * (poop.x - px) + (poop.y - py) * (poop.y - py));
+        return d < poop.r + this.w/2;
     }
 }
