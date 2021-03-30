@@ -13,7 +13,7 @@ class Poop {
         this.x = Math.random()*400; // Math.random은 0~1까지의 랜덤값을 만듦
         this.speed = 20 + Math.random()*120;
         this.r = 5 + Math.random()*5;
-        //this.color = rgba()
+        this.color = 'rgba(' + Math.random()*255 + ',' + Math.random()*255 + ',' + Math.random()*255 + ',0.5)';
     }
     update() {
         this.y += this.speed * 1/60;

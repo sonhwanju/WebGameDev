@@ -2,7 +2,7 @@ class Game {
     constructor(canvas) {
         this.objectList = [];
         let img = new Image();
-        img.src = "/player.jpg";
+        img.src = "/1/player.jpg";
 
         let p = new Player(220, 740, 200, 40, 60, img);
         this.objectList.push(p);
@@ -32,7 +32,7 @@ class Game {
                 break;
             }
         }
-        //Math.round(this.time += 1/60);
+        this.time += 1/60;
     }
     render() {
         if(this.gameOver) return;
