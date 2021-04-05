@@ -10,15 +10,13 @@ class Player {
         this.targetX = x;
         this.targetY = y;
 
-        this.l = 0.01;
     }
 
     setTarget(x,y) {
-        this.targetX = x - this.w /2;  //정중앙으로 위치하도록 너비랑 높의 절반만큼 빼줌.
+        this.targetX = x - this.w / 2;  //정중앙으로 위치하도록 너비랑 높의 절반만큼 빼줌.
         this.targetY = y - this.h / 2;
 
     //여기서는 정말 타겟을 설정하는거만 한다.
-    //this.l = Math.sqrt(Math.pow(this.targetX-this.x,2)+Math.pow(this.targetY-this.y,2));
     }
     update(d){
         /*if(this.x >= 600 - this.w || this.x < 0) {
@@ -36,9 +34,6 @@ class Player {
             this.x += dx / distance * this.speed * d;
             this.y += dy / distance * this.speed * d;
         }
-        //그 뒤에 이 쓰레기같은 코드는 치워줌
-        // this.x += ((this.targetX - this.x)/this.l)*this.speed* d;
-        // this.y += ((this.targetY - this.y)/this.l)*this.speed * d;
     }
 
     render(ctx){
