@@ -4,8 +4,19 @@ let nameInput = document.querySelector("#nameInput");
 let scoreInput = document.querySelector("#scoreInput");
 let msgInput = document.querySelector("#msgInput");
 let rl = document.querySelector("#rankList");
+let openBtn = document.querySelector("#btnOpen");
+let closeBtn = document.querySelector("#btnClose");
 
 //이름 점수 남길말 3개 입력받고 저장
+
+openBtn.addEventListener("click", function() {
+    let p = document.querySelector("#popup");
+    p.classList.add("on");
+});
+closeBtn.addEventListener("click", function() {
+    let p = document.querySelector("#popup");
+    p.classList.remove("on");
+});
 
 saveBtn.addEventListener("click", function(){
     //let name = nameInput.value;
