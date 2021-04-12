@@ -1,0 +1,17 @@
+{
+  "name": "namucrawl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "namu.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "sonevil",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.6",
+    "request": "^2.88.2",
+    "save": "^2.4.0"
+  }
+}
