@@ -5,7 +5,7 @@ const request = require('request');
 const cheerio = require('cheerio');
 const fs = require('fs');
 
-let name = process.argv[2]//+"".replace(/ /gi,"");
+let name = process.argv[2];
 let no = process.argv[3]*1;
 let no2 = process.argv[4]*1;
 
@@ -25,11 +25,11 @@ request(listUrl, (err, res, body) => {
     }
     
     let titles = Object.keys(result); //제목을 가져옴 result의 키값이 제목이다.
-
+ 
     let filteredList = titles.filter(x => x.includes(name)).map(x => ({id:result[x], name:x}) ); //필터를 사용하여 name에 입력한 얘들이 포함된 얘를 보여줌
 
     let filteredListId = filteredList.map(filteredList=>filteredList.id)[0]; //숫자
-    let filteredListName = (filteredList.map(filteredList=>filteredList.name)[0])//이름
+    let filteredListName = filteredList.map(filteredList=>filteredList.name)[0]//이름 
     console.log(filteredListName); //로그를 찍어서 id를 보여줌
     
 for(let j = no; j <= no2; j++) {
