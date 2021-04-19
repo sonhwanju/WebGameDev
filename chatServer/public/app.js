@@ -10,8 +10,8 @@ const chatList = document.querySelector("#chatList"); //채팅을 집어넣는�
 
 let nickName = "";
 let socket = null;
-let roomList = []; //채팅방 리스트
-let userList = []; //해당 채팅방에있는 유저들의 리스트
+let roomList = []; //채팅방 리스트고
+let userList = []; //해당 채팅방에 있는 유저들의 리스트다
 
 btnLogin.addEventListener("click", e =>{
     let name = loginIdInput.value;
@@ -28,13 +28,19 @@ function socketConnect(){
 
     socket.emit("login", {nickName});
 
-    socket.on("login", data=>{
+    socket.on("login", data => {
         roomList = data.roomList;
         loginPage.classList.add("left");
-        lobbyPage.classList.remove("right"); //로비페이지로 진행
-        //여기에 받은 룸정보를 기반으로 html을 만들어주는 코드가 들어가야한다.
+        lobbyPage.classList.remove("right");  //로비페이지로 진행
         makeRoomData(roomList); //룸리스트를 기반으로 html을 만들어준다.
-        console.log(roomList);
+        //console.log(roomList);
+    });
+    
+    socket.on("enter-room", data => {
+        //data에는 userList가 들어온다.
+        userList = data.userList;
+        lobbyPage.classList.add("left");
+        chatPage.classList.remove("right");
     });
 
     socket.on("chat", data => {
@@ -59,10 +65,13 @@ function socketConnect(){
         socket.emit("chat", {nickName, msg});
     });
 }
+
 const roomListDom = document.querySelector("#roomList");
 
-function makeRoomData(roomList) {
+
+function makeRoomData(roomList){
     roomListDom.innerHTML = "";
+
     roomList.forEach(x => {
         let li = document.createElement("li");
         li.innerHTML = `<span class="title">
@@ -71,16 +80,15 @@ function makeRoomData(roomList) {
                         <span class="number">
                             ${x.number}/${x.maxNumber}
                         </span>`;
-        
         li.classList.add("room");
         roomListDom.appendChild(li);
 
-        li.addEventListener("click" , e=>{
-            console.log(x);
+        li.addEventListener("click", e => {
+            socket.emit("enter-room", {roomNo : x.roomNo});
         });
     });
 }
 
-//test 코드 개발이 끝나면 지울것
-loginIdInput.value = "ㅈ경혁";
+//test코드 개발이 끝나면 지울것
+loginIdInput.value = "테스트";
 document.querySelector("#btnLogin").click();
