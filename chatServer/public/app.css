@@ -87,7 +87,15 @@
   align-items: center;
 }
 
-#chatList {
+.chat-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  gap: 10px;
+}
+
+#chatList,
+#connectionList {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -148,21 +156,61 @@
   gap: 20px;
   padding: 10px;
   height: 80%;
-  overflow-y: auto; /*채팅방이 많아지면 스크롤바가 생기도록 처리*/
+  overflow-y: auto; /* 채팅방이 많아지면 스크롤바가 생기도록 처리 */
 }
+
 #roomList > .room {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 5px 12px;
   border-radius: 4px;
-
   background-color: #fff;
   color: #000;
   box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
   transition: all 0.5s;
 }
+
 #roomList > .room:hover {
   background-color: rgba(18, 107, 241, 0.8);
   color: #fff;
+}
+
+.btn {
+  border: 1px solid rgba(18, 107, 241, 0.884);
+  border-radius: 5px;
+  padding: 8px 12px;
+  background-color: rgba(32, 114, 238, 0.884);
+  color: #fff;
+  transition: all 0.5s;
+}
+
+.btn:hover {
+  background-color: rgba(10, 60, 136, 0.884);
+}
+
+#popup {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 20;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+#popup.on {
+  display: flex;
+}
+
+#popup > .inner {
+  width: 400px;
+  height: 220px;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

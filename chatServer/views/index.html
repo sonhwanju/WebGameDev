@@ -7,6 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="/app.css">
     <script src="/socket.io/socket.io.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 <body>
     <div id="chatBody">
@@ -29,14 +30,23 @@
                         
                     </li>
                 </ul>
+                <div class="button=row">
+                    <button class="btn" id="btnCreateRoom">채팅방 생성</button>
+                    <button class="btn" id="btnRefresh">갱신하기</button>
+                </div>
             </div>
         </div>
         <div class="inner-box right">
             <div class="chat-box">
-                <ul id="chatList">
+                <div class="chat-container">
+                    <ul id="chatList">
                    
-                </ul>
-                <!-- end of chatList -->
+                    </ul>
+                     <!-- end of chatList -->
+                    <ul id="connectionList">
+    
+                    </ul>
+                </div>
                 <div id="inputBox">
                     <input type="text" id="msgInput" class="form-control">
                     <button id="btnSend">전송</button>
@@ -44,6 +54,13 @@
             </div>
             <!-- end of chatBox -->
             
+        </div>
+    </div>
+    <div id="popup"">
+        <div class="inner">
+            <input type="text" class="form-control" placeholder="방제목 입력" id="roomTitle">
+            <input type="number" min="1" max="10" value="4" class="form-control" placeholder="인원수 입력">
+            <button id="btnCreate" class="btn">생성</button>
         </div>
     </div>
     <script src="/app.js"></script>

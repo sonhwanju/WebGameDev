@@ -7,11 +7,34 @@ const btnLogin = document.querySelector("#btnLogin");
 const msgInput = document.querySelector("#msgInput");
 const btnSend = document.querySelector("#btnSend");
 const chatList = document.querySelector("#chatList"); //채팅을 집어넣는거
+const userListDom = document.querySelector("#connectionList"); //사용자 정보
+
+// 김경혁 1승, 박선우 1승, 이준협 1승
+// 2500원 이내
+
+const popup = document.querySelector("#popup");
+const roomTitleInput = document.querySelector("#roomTitle");
 
 let nickName = "";
 let socket = null;
 let roomList = []; //채팅방 리스트고
 let userList = []; //해당 채팅방에 있는 유저들의 리스트다
+
+document.querySelector("#btnCreateRoom").addEventListener("click", e =>{
+    popup.classList.add("on");
+});
+
+document.querySelector("#btnCreate").addEventListener("click", e => {
+    let title = roomTitleInput.value;
+    if(title.trim() === ""){
+        Swal.fire("방 이름은 공백일 수 없습니다.");
+        return;
+    }
+    //여기에 방 최대인원에 대한 정보도 같이 체크하고 전송해야 해.
+    //여기까지 왔다면 방을 생성할 수 있으니 소켓으로 전송
+    socket.emit("create-room", {title}); //지금은 title만 보내고 있다.
+    popup.classList.remove("on"); //전송후 팝업은 닫아준다.
+});
 
 btnLogin.addEventListener("click", e =>{
     let name = loginIdInput.value;
@@ -38,9 +61,13 @@ function socketConnect(){
     
     socket.on("enter-room", data => {
         //data에는 userList가 들어온다.
-        userList = data.userList;
         lobbyPage.classList.add("left");
         chatPage.classList.remove("right");
+    });
+
+    socket.on("user-refresh", data =>{
+        userList = data.userList;
+        makeUserData(userList);
     });
 
     socket.on("chat", data => {
@@ -57,6 +84,11 @@ function socketConnect(){
         chatList.scrollTop = chatList.scrollHeight;
     });
 
+    socket.on("bad-access", data => {
+        Swal.fire(data.msg);
+        return;
+    });
+
     //메시지 전송버튼 눌렀을때
     btnSend.addEventListener("click", e=>{
         if(msgInput.value.trim() === "") return;
@@ -68,6 +100,15 @@ function socketConnect(){
 
 const roomListDom = document.querySelector("#roomList");
 
+
+function makeUserData(userList){
+    userListDom.innerHTML = "";
+    userList.forEach(x => {
+        let li = document.createElement("li");
+        li.innerHTML = x.nickName;
+        userListDom.appendChild(li);
+    });
+}
 
 function makeRoomData(roomList){
     roomListDom.innerHTML = "";
@@ -92,3 +133,21 @@ function makeRoomData(roomList){
 //test코드 개발이 끝나면 지울것
 loginIdInput.value = "테스트";
 document.querySelector("#btnLogin").click();
+
+
+// async function test(){
+//     for(let i = 0; i < 10; i++){
+//         await print(i);
+//     }
+// }
+
+// test();
+
+// function print(i){
+//     return new Promise((resolve, reject)=>{
+//         setTimeout(()=>{
+//             console.log(i);
+//             resolve();
+//         }, Math.random() * 2000);
+//     });
+// }
