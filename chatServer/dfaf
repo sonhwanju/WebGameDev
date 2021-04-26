@@ -1,0 +1,7 @@
+INSERT INTO 테이블명(컬럼1, 컬럼2)
+VALUES (컬럼1값, 컬럼2값)
+
+UPDATE 테이블명 SET 컬럼명 = 값
+WHERE id = 값
+
+SELECT 컬럼명 FROM 테이블명 WHERE 조건

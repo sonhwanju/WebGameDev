@@ -3,3 +3,4 @@ Debug
 nodeStart/node_modules
 package-lock.json
 chatServer/node_modules
+chatServer/secret.js
