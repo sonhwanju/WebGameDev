@@ -38,8 +38,9 @@ io.on("connection", socket => {
                 let idx = roomList.findIndex( x => x.roomNo === r);
                 roomList.splice(idx, 1);//해당 룸을 찾아서 삭제한다.
             }else{
-                //현재인원 갱신+시스템메시지로 누구님이 나갔습니다.
-                
+                socket.leave(r);
+                io.to(r).emit("chat", {sender:socket.id, msg:"님이 나가셨습니다.", nickName:socket.nickName});
+                refreshUserList(r);
             }
         });
 
@@ -61,6 +62,8 @@ io.on("connection", socket => {
         }
 
         const {roomNo} = data;
+        console.log(roomNo);
+        console.log(roomList);
         let targetRoom = roomList.find(x => x.roomNo === roomNo);
         if(targetRoom === undefined){
             socket.emit("bad-access", {msg:"존재하지 않는 방입니다"});
@@ -111,9 +114,10 @@ io.on("connection", socket => {
 
         const {title} = data;  //나중에는 여기서 최대인원도 받아야 한다.
         let roomNo = 1;
-        if(roomList.length > 0) {
+        if(roomList.length > 0){
             roomNo = Math.max(...roomList.map(x => x.roomNo)) + 1; //최대 방번호
         }
+        
         
         roomList.push({title, roomNo, number:1, maxNumber:4}); //룸리스트에 방을 추가
         socket.join(roomNo); //방으로 들어간다.
@@ -125,6 +129,12 @@ io.on("connection", socket => {
     });
 
 });
+
+async function refreshUserList(roomNo){
+    let userList = [...await io.in(roomNo).allSockets()]; //해당방에 존재하는 모든 유저가 가져와져;
+    userList = userList.map( id =>  ({id , nickName: conSo[id].nickName })  );
+    io.to(roomNo).emit("user-refresh", {userList});
+}
 
 server.listen(15454, ()=>{
     console.log("서버가 15454포트에서 돌아가고 있습니다.");

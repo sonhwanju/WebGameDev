@@ -9,9 +9,6 @@ const btnSend = document.querySelector("#btnSend");
 const chatList = document.querySelector("#chatList"); //채팅을 집어넣는거
 const userListDom = document.querySelector("#connectionList"); //사용자 정보
 
-// 김경혁 1승, 박선우 1승, 이준협 1승
-// 2500원 이내
-
 const popup = document.querySelector("#popup");
 const roomTitleInput = document.querySelector("#roomTitle");
 
@@ -125,6 +122,7 @@ function makeRoomData(roomList){
         roomListDom.appendChild(li);
 
         li.addEventListener("click", e => {
+            console.log(x);
             socket.emit("enter-room", {roomNo : x.roomNo});
         });
     });
