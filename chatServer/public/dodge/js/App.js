@@ -36,6 +36,10 @@ class App{
         this.socket.on("msg", data=> {
             alert(data.msg);
         });
+        this.scoreData = [];
+        this.socket.on("refreshscore", data=> {
+            this.scoreData = data;
+        });
     }
 
     frame = (timestamp) =>{
@@ -80,6 +84,9 @@ class App{
 
     setGameOver() {
         this.gameOver = true;
+
+        this.socket.emit("refreshscore");
+        
         this.popupDom.classList.add("on");
         //흔치않은 동기함수 prompt, alert
         // let name = prompt("너의 이름을 입력해라");
@@ -107,16 +114,29 @@ class App{
         this.bulletList.forEach(x => x.render(ctx));
 
         if(this.gameOver) {
-            ctx.save();
-            ctx.fillStyle = "rgba(0,0,0,0.3)";
-            ctx.fillRect(0, 0, 600, 400);
-            ctx.textBaseline = "middle";
-            ctx.textAlign = "center";
-            ctx.fillStyle = "#fff";
-            ctx.font = "40px Arial";
-            ctx.fillText("Game Over", 300, 200);
-            ctx.restore();
-            return
+            this.drawGameOverScreen(ctx);
+            //return
         };
+    }
+
+    drawGameOverScreen(ctx) {
+        ctx.save();
+        ctx.fillStyle = "rgba(0,0,0,0.3)";
+        ctx.fillRect(0, 0, 600, 400);
+        ctx.textBaseline = "middle";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#fff";
+        ctx.font = "40px Arial";
+        ctx.fillText("Game Over", 300, 50);
+
+        ctx.fillStyle = "rgba(255,255,255,0.8)";
+        ctx.fillRect(150,70,300,200);
+
+        ctx.fillStyle = "#000";
+        ctx.font = "16px Arial";
+        this.scoreData.forEach((s,idx)=> {
+            ctx.fillText(`${s.name} : ${s.score} [${s.msg}]`,300,90 + 20 * (idx+1));
+        });
+        ctx.restore();
     }
 }

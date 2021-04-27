@@ -26,13 +26,24 @@ io.on("connection", socket =>{
         let {name,score,msg} = data;  
         let con = await connPool.getConnection();
         
-            const sql = `INSERT INTO score_list (name,score,msg) VALUES(?,?,?)`
-            let result = await con.query(sql, [name,score,msg]);
-            if(result[0].affectedRows == 1) {
-                //성공시 해줘야할 일
-                socket.emit("msg", {msg:"기록 완료"});
-            }
+        const sql = `INSERT INTO score_list (name,score,msg) VALUES(?,?,?)`
+        let result = await con.query(sql, [name,score,msg]);
+        const sql2 = `SELECT * FROM score_list ORDER BY score DESC LIMIT 0, 5`
+        let result2 = await con.query(sql2);
+        if(result[0].affectedRows == 1) {
+            //성공시 해줘야할 일
+            socket.emit("msg", {msg:"기록 완료"});
+            socket.emit("refreshscore",result2[0]);
+        }
+    });
+
+    socket.on("refreshscore",async data=> {
+        let con = await connPool.getConnection();
         
+        const sql = `SELECT * FROM score_list ORDER BY score DESC LIMIT 0, 5`
+        let result = await con.query(sql);
+        socket.emit("refreshscore", result[0]);
+        //result[0]
     });
 
     
