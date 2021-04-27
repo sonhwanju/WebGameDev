@@ -1,0 +1,122 @@
+
+class App{
+    constructor(selector){
+        this.canvas = document.querySelector(selector);
+        this.ctx = this.canvas.getContext("2d");
+        this.popupDom = document.querySelector("#popup");
+
+        document.querySelector("#btnSave").addEventListener("click",e=> {
+            let name = document.querySelector("#name").value;
+            let msg = document.querySelector("#msg").value;
+
+            this.socket.emit("savescore", {name,score:this.score,msg});
+
+            this.popupDom.classList.remove("on");
+        });
+        document.querySelector("#btnCancel").addEventListener("click",e=>{
+            this.popupDom.classList.remove("on");
+        })
+
+        this.bulletList = [];
+        
+        this.player = new Player(285, 185, 30, 30, "/dodge/images/mario.png");        
+
+        this.bg = new Image();
+        this.bg.src = "/dodge/images/bgmain.png";
+        this.score = 0;
+
+        this.gameStart();
+
+        this.nextGenTime = 0;
+
+        this.time = performance.now();
+        requestAnimationFrame(this.frame);
+
+        this.socket = new io();
+        this.socket.on("msg", data=> {
+            alert(data.msg);
+        });
+    }
+
+    frame = (timestamp) =>{
+        let d = (timestamp - this.time) / 1000;
+        this.time = timestamp;
+        this.update(d);
+        this.render(this.ctx);
+        requestAnimationFrame(this.frame);
+    };
+
+    gameStart(){
+        this.bulletList = [];
+        this.score = 0;
+        this.nextGenTime = 0;
+        this.gameOver = false;
+    }
+    makeBullet(count){
+        for(let i = 0; i < 20; i++){
+            let b = new Bullet(600, 400, this.player);
+            b.reset();
+            this.bulletList.push(b)
+        }
+    }
+
+    update(d){
+        if(this.gameOver) return;
+        this.score += d;
+        if(this.score > this.nextGenTime){
+            this.makeBullet(10);
+            this.nextGenTime += 5;
+        }
+        this.player.update(d);
+        this.bulletList.forEach(x => {
+            x.update(d);
+            if(this.player.checkCol(x)) {
+                this.setGameOver();
+            }
+        });
+
+        
+    }
+
+    setGameOver() {
+        this.gameOver = true;
+        this.popupDom.classList.add("on");
+        //흔치않은 동기함수 prompt, alert
+        // let name = prompt("너의 이름을 입력해라");
+        // let a = "0100"
+        // let score1 = this.score;
+
+        // if(name != null) {
+        //     this.socket.emit("savescore",{name:name,score:score1,msg:a})
+            
+        // }
+        
+        // console.log(name);
+    }
+
+    render(ctx){
+        
+        ctx.clearRect(0,0, 600, 400);
+        
+
+        ctx.drawImage(this.bg, 0, 0, 600, 400);
+        ctx.font = "25px Arial";
+        let displayScore = Math.round(this.score * 100) / 100;
+        ctx.fillText(displayScore, 500, 20);
+        this.player.render(ctx);
+        this.bulletList.forEach(x => x.render(ctx));
+
+        if(this.gameOver) {
+            ctx.save();
+            ctx.fillStyle = "rgba(0,0,0,0.3)";
+            ctx.fillRect(0, 0, 600, 400);
+            ctx.textBaseline = "middle";
+            ctx.textAlign = "center";
+            ctx.fillStyle = "#fff";
+            ctx.font = "40px Arial";
+            ctx.fillText("Game Over", 300, 200);
+            ctx.restore();
+            return
+        };
+    }
+}

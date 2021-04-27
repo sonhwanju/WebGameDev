@@ -17,7 +17,25 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "db.html"));
 });
 
+app.get("/game",(req,res)=> {
+    res.sendFile(path.join(__dirname,"views","dodge.html"));
+})
 io.on("connection", socket =>{
+    console.log(`유저 연결 : ${socket.id}`);
+    socket.on("savescore", async data=>{
+        let {name,score,msg} = data;  
+        let con = await connPool.getConnection();
+        
+            const sql = `INSERT INTO score_list (name,score,msg) VALUES(?,?,?)`
+            let result = await con.query(sql, [name,score,msg]);
+            if(result[0].affectedRows == 1) {
+                //성공시 해줘야할 일
+                socket.emit("msg", {msg:"기록 완료"});
+            }
+        
+    });
+
+    
     socket.on("register", async data => {
         //register라는 메시지로 data가 넘어온다.
         let {name, email, pass} = data;
