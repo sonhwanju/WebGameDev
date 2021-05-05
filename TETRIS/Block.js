@@ -8,7 +8,7 @@ export class Block{
         this.color = "#ff0000";
     }
 
-    setBloackData(fill, color) {
+    setBlockData(fill, color) {
         this.fill = fill;
         this.color = color;
     }
@@ -25,5 +25,10 @@ export class Block{
             ctx.fillStyle = this.color;
             ctx.fillRect(this.x*this.size+this.padding, this.y*this.size+this.padding, this.size - 1, this.size - 1);
         }
+    }
+
+    copyBlockData(other) {
+        this.fill = other.fill;
+        this.color = other.color;
     }
 }

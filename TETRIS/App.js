@@ -5,6 +5,7 @@ class App {
         this.init();
         this.debug(); //테스트용코드
         this.game = new Game();
+        Game.instance = this.game;
     }
     init() {
         document.querySelector("#btnLogin").addEventListener("click", ()=> {
@@ -14,6 +15,10 @@ class App {
         });
         document.querySelector("#btnStart").addEventListener("click",()=>{
             this.game.start();
+        });
+        document.querySelector("#btnStart").addEventListener("keydown",e=>{
+            e.preventDefault();
+            return false;
         });
     }
 
