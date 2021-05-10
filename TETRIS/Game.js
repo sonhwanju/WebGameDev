@@ -14,6 +14,8 @@ export class Game {
         this.time = 2000;
         this.currentTime = 0;
         this.score = 0;
+        this.scoreBox = document.querySelector(".score-box");
+        this.check = 1000;
     }
     
     addKeyEvent() {
@@ -49,11 +51,16 @@ export class Game {
         //스코어는 화면에 표시
         //스코어가 올라갈때마다 time이 줄어서 최대 0.5초까지 줄어든다.
         
+        
     }
     render(){
         this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
 
         this.arr.forEach(row=> row.forEach(item=>item.render(this.ctx)));
+
+        this.scoreBox.innerHTML = `${this.score} 점`;
+
+        this.player.render(this.ctx);
     }
 
     start() {
@@ -88,6 +95,7 @@ export class Game {
             }
             if(full) {
                 this.lineRemove(i); //i윗줄을 전부 한칸씩 내린다
+                this.addScore();
                 i++;
             }
         }
@@ -102,7 +110,26 @@ export class Game {
         for(let j = 0; j < this.arr[0].length; j++) {
             this.arr[0][j].setBlockData(false);
         }
-        this.score += 100;
+        
+    }
+    addScore() {
+        this.score += 500;
+
+        if(this.score % 5 == 0 && this.time > 100) {
+            this.time -= 300;
+            if(this.time < 100) {
+                this.time = 100;
+            }
+        }
+        // if(this.score >= this.check) {
+        //     if(this.time > 500) {
+        //         this.time -= 500;
+        //         this.check += 1000;
+        //         // console.log(this.score);
+        //         // console.log(this.time);
+        //     }
+            
+        // }
     }
 
     debug(){

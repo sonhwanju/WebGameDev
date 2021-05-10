@@ -1,4 +1,5 @@
 import {Game} from '/TETRIS/Game.js';
+import {NextBlock} from '/TETRIS/NextBlock.js';
 // typescript
 
 export class Player{
@@ -24,8 +25,8 @@ export class Player{
                 [{x:-2, y:0}, {x:-1, y:0}, {x:0, y:0}, {x:0, y:1}]
             ], // 역ㄴ
             [
-                [{x:-1, y:1}, {x:0, y:1}, {x:0, y:0}, {x:1, y:0}],
-                [{x:0, y:-1}, {x:0, y:0}, {x:1, y:0}, {x:1, y:1}],
+                [{x:-1, y:0}, {x:0, y:-1}, {x:0, y:0}, {x:-1, y:1}],
+                [{x:-1, y:0}, {x:0, y:0}, {x:0, y:1}, {x:1, y:1}],
             ], // _┌━ 모양
             [
                 [{x:0, y:-1}, {x:0, y:0}, {x:1, y:0}, {x:1, y:1}],
@@ -63,7 +64,13 @@ export class Player{
         this.initPosition(); //위치 초기화
         this.setBlockData(true, this.colorSet[this.currentBlock]);
 
+        this.nextBlockCanvas = new NextBlock();
 
+        this.nextBlockCanvas.setNextBlock(this.blockSet[this.nextBlock][0]);
+    }
+
+    render(ctx) {
+        this.nextBlockCanvas.render();
     }
 
     initPosition(){
@@ -80,6 +87,8 @@ export class Player{
         let nextIdx = (this.idx + 1) % this.blockSeq.length;
         this.currentBlock = this.blockSeq[this.idx];
         this.nextBlock = this.blockSeq[nextIdx];
+
+        this.nextBlockCanvas.setNextBlock(this.blockSet[this.nextBlock][0]);
         this.initPosition();
     }
 
