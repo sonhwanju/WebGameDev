@@ -28,7 +28,7 @@ export class NextBlock
         }
     }
 
-    setNextBlock(data)
+    setNextBlock(data,color)
     {
         //[{x:0, y:-2}, {x:0, y:-1}, {x:0, y:0}, {x:1, y:0}]
         //data = [{x:0, y:0}, {x:-1, y:0}, {x:-1, y:-1}, {x:0, y:-1}];
@@ -51,7 +51,7 @@ export class NextBlock
         //새롭게 그려주도록 채워준다.
         for(let i = 0; i < data.length; i++){
             let point = data[i];
-            this.arr[y + point.y][x + point.x].setBlockData(true, "#ff0000");
+            this.arr[y + point.y][x + point.x].setBlockData(true, color);
         }
     }
 }

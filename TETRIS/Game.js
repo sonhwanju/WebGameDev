@@ -16,11 +16,21 @@ export class Game {
         this.score = 0;
         this.scoreBox = document.querySelector(".score-box");
         this.check = 1000;
+
+        this.gameOverPanel = document.querySelector("#gameOverBox");
+        this.gameOver = false;
     }
     
+    setGameOver() {
+        clearInterval(this.frame);
+        this.gameOver = true;
+        this.gameOverPanel.classList.add("on");
+        this.render();
+    }
+
     addKeyEvent() {
         document.addEventListener("keydown", e=> {
-            if(this.player == null) return;
+            if(this.player == null || this.gameOver) return;
             if(e.keyCode == 37) {
                 this.player.moveLeft(); 
             }
@@ -64,6 +74,7 @@ export class Game {
     }
 
     start() {
+        this.gameOver = false;
         if(this.frame != null) {
             clearInterval(this.frame);
         }
@@ -71,6 +82,7 @@ export class Game {
             this.update();
             this.render();
         },1000/30);
+        this.gameOverPanel.classList.remove("on");
         this.arr = [];
         for(let i = 0; i < 20; i++) {
             let row = []

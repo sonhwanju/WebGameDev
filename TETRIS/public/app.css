@@ -29,6 +29,7 @@
 }
 .game-container {
     display: flex;
+    position: relative;
 }
 .info-box {
     padding: 0 10px;
@@ -61,4 +62,19 @@
     padding: 10px 16px;
     border-radius: 5px;
     font-size: 20px;
+}
+#gameOverBox {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    opacity: 0;
+    transition: all 0.5s;
+}
+#gameOverBox.on {
+    opacity: 1;
+}
+
+#gameOverBox > h2 {
+    font-size: 40px;
 }

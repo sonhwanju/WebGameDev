@@ -66,7 +66,7 @@ export class Player{
 
         this.nextBlockCanvas = new NextBlock();
 
-        this.nextBlockCanvas.setNextBlock(this.blockSet[this.nextBlock][0]);
+        this.nextBlockCanvas.setNextBlock(this.blockSet[this.nextBlock][0],this.colorSet[this.nextBlock]);
     }
 
     render(ctx) {
@@ -88,8 +88,13 @@ export class Player{
         this.currentBlock = this.blockSeq[this.idx];
         this.nextBlock = this.blockSeq[nextIdx];
 
-        this.nextBlockCanvas.setNextBlock(this.blockSet[this.nextBlock][0]);
+        this.nextBlockCanvas.setNextBlock(this.blockSet[this.nextBlock][0],this.colorSet[this.nextBlock]);
         this.initPosition();
+
+        if(!this.checkPossible()) {
+            Game.instance.setGameOver();
+            
+        }
     }
 
     moveLeft(){
@@ -115,8 +120,26 @@ export class Player{
         let temp = this.currentRot;
         this.currentRot = (this.currentRot + 1) % this.blockSet[this.currentBlock].length;
         if(!this.checkPossible()){
-            this.currentRot = temp;
+            if(this.x == 0) {
+                this.x++;
+                if(!this.checkPossible()) {
+                    this.x--;
+                    this.currentRot = temp;
+                }
+            }
+            else if(this.x == 9) {
+                this.x--;
+                if(!this.checkPossible()) {
+                    this.x++;
+                    this.currentRot = temp;
+                }
+            }
+            else {
+                this.currentRot = temp;
+            }
+            
         }
+       
         this.setBlockData(true, this.colorSet[this.currentBlock]);
     }
     
