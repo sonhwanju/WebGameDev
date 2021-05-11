@@ -13,7 +13,7 @@
     display: flex;
     width: 3072px;
     position: relative;
-    left: -1024px;
+    left: 0px;
     top: 0;
     transition: all 1s;
 }
@@ -77,4 +77,51 @@
 
 #gameOverBox > h2 {
     font-size: 40px;
+}
+.btn {
+    border: 1px solid transparent;
+    transition:  all 0.8s;
+    padding: 8px 12px;
+    outline: none;
+    border-radius: 5px;
+}
+
+.btn-blue {
+    border-color: rgb(25,114,187);
+    background-color: rgb(41,124,192);
+    color: #fff;
+}
+.btn-blue:hover {
+    background-color: rgb(19,88,145);
+}
+.btn-red {
+    border-color: rgb(197,22,22);
+    background-color: rgb(204,41,41);
+    color: #fff;
+}
+.btn-red:hover {
+    background-color: rgb(155,21,21);
+}
+.form-control {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    outline: none;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+}
+#loginPage {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 40px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
 }

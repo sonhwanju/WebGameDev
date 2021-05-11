@@ -1,4 +1,4 @@
-import { Block } from "/TETRIS/Block.js";
+import { Block } from "/Block.js";
 
 export class NextBlock
 {

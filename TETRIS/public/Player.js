@@ -1,5 +1,5 @@
-import {Game} from '/TETRIS/Game.js';
-import {NextBlock} from '/TETRIS/NextBlock.js';
+import {Game} from '/Game.js';
+import {NextBlock} from '/NextBlock.js';
 // typescript
 
 export class Player{

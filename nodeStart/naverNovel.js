@@ -8,8 +8,8 @@ let no2 = process.argv[4]*1;
 
 
 for(let j = no; j <= no2; j++) {
-    let uri = `https://novel.naver.com/webnovel/detail.nhn?novelId=${novelId}&volumeNo=${j}`;
-    request(uri, function(err,res,body) {
+    let url = `https://novel.naver.com/webnovel/detail.nhn?novelId=${novelId}&volumeNo=${j}`;
+    request(url, function(err,res,body) {
 
     
         let $ = cheerio.load(body);

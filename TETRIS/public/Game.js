@@ -1,5 +1,5 @@
-import { Player } from '/TETRIS/Player.js';
-import {Block} from '/TETRIS/Block.js';
+import { Player } from '/Player.js';
+import {Block} from '/Block.js';
 
 export class Game {
     static instance = null;
