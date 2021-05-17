@@ -7,7 +7,7 @@ class App {
         this.pageContainer = $(".page-container");
         this.init();
         //this.debug(); //테스트용코드
-        this.game = new Game();
+        this.game = new Game(this.socket);
         Game.instance = this.game;
     }
     init() {
@@ -25,7 +25,8 @@ class App {
 
         });
         $("#btnStart").addEventListener("click",()=>{
-            this.game.start();
+            //this.game.start();
+            this.socket.emit("game-start");
         });
         $("#btnStart").addEventListener("keydown",e=>{
             e.preventDefault();
@@ -34,6 +35,25 @@ class App {
 
         $("#btnRegister").addEventListener("click", e=> {
             this.registerProcess();
+        });
+
+        $("#btnCreaterRoom").addEventListener("click",e => {
+            this.createRoom();
+        })
+        //디버그용 이벤트
+        document.addEventListener("keydown",e => {
+            if(e.keyCode == 81) {
+                this.debug("asd","asd");
+                setTimeout(()=> {
+                    this.socket.emit("create-room", {name:"더미 방입니다."});
+                },500);
+            }
+            else if(e.keyCode == 87) {
+                this.debug("as","as");
+                setTimeout(()=> {
+                    this.socket.emit("join-room",{roomName:1});
+                },500);
+            }
         });
     }
 
@@ -49,14 +69,52 @@ class App {
             }
         });
         this.socket.on("login-response", data=> {
-            alert(data.msg);
+            //alert(data.msg);
             if(data.status) {
                 $("#loginEmail").value = "";
                 $("#loginPassword").value = "";
                 this.pageContainer.style.left = "-1024px";
+
+                const roomBox = $("#roomListBox");
+                roomBox.innerHTML = "";
+                data.roomList.forEach(room => {
+                    let div = document.createElement("div");
+                    div.classList.add("room");
+                    div.innerHTML = `<span class="name">${room.name}</span>
+                                     <span class="number">${room.number}</span>`;
+                    div.addEventListener("click", e => {
+                        this.socket.emit("join-room", {roomName:room.roomName});
+                    });
+
+                    roomBox.appendChild(div);
+                });
             }
         });
-        
+        this.socket.on("enter-room", data => {
+            this.pageContainer.style.left = "-2048px";
+        });
+        this.socket.on("join-room", data=> {
+            this.pageContainer.style.left = "-2048px";
+            //$("#btnStart").style.visibility = "hidden";
+            $("#btnStart").disabled = true;
+        });
+        this.socket.on("bad-access",data=> {
+            alert(data.msg);
+        });
+
+        this.socket.on("game-start",data=> {
+            this.game.start();
+            this.socket.emit("in-playing");
+        });
+    }
+
+    createRoom() {
+        let result = prompt("방 이름을 입력해라");
+        if(result !== "" && result !== null) {
+            this.socket.emit("create-room",{name:result});
+        }else {
+            alert("방이름이 있어야 함");
+        }
     }
 
     registerProcess() {
@@ -72,7 +130,9 @@ class App {
         this.socket.emit("register-request",{email,name,pw,pwc});
     }
 
-    debug(){
+    debug(id,pw){
+        $("#loginEmail").value = id;
+        $("#loginPassword").value = pw;
         $("#btnLogin").click();
     }
 }
