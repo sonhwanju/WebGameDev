@@ -85,19 +85,12 @@ export class Game {
 
         this.scoreBox.innerHTML = `${this.score} 점`;
 
-        this.player.render(this.ctx);
+        if(this.player !== null)
+            this.player.render(this.ctx);
     }
-
-    start() {
-        this.gameOver = false;
-        if(this.frame != null) {
-            clearInterval(this.frame);
-        }
-        this.frame = setInterval(()=> {
-            this.update();
-            this.render();
-        },1000/30);
+    reset() {
         this.gameOverPanel.classList.remove("on");
+        this.gameOver = false;
         this.arr = [];
         for(let i = 0; i < 20; i++) {
             let row = []
@@ -106,6 +99,20 @@ export class Game {
             }
             this.arr.push(row);
         }
+        
+        this.render();
+    }
+
+    start() {
+        
+        if(this.frame != null) {
+            clearInterval(this.frame);
+        }
+        this.frame = setInterval(()=> {
+            this.update();
+            this.render();
+        },1000/30);
+        
         //this.debug();
         this.player = new Player();
         this.time = 2000;

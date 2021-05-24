@@ -38,7 +38,7 @@ class App {
             this.registerProcess();
         });
 
-        $("#btnCreate   Room").addEventListener("click", e => {
+        $("#btnCreateRoom").addEventListener("click", e => {
             this.createRoom();
         })
         $("#btnLobby").addEventListener("click", e => {
@@ -49,6 +49,10 @@ class App {
         $("#btnRefreshRoom").addEventListener("click", e=> {
             this.socket.emit("room-list");
         });
+        $("#btnRank").addEventListener("click",e => {
+            this.socket.emit('rank-list')
+        });
+
         //디버그용 이벤트
         document.addEventListener("keydown", e => {
             if (e.keyCode == 81) {
@@ -93,11 +97,15 @@ class App {
         });
         this.socket.on("enter-room", data => {
             this.pageContainer.style.left = "-2048px";
+            this.game.reset();
+            $("#btnStart").disabled = false;
         });
         this.socket.on("join-room", data => {
             this.pageContainer.style.left = "-2048px";
             //$("#btnStart").style.visibility = "hidden";
+            this.game.reset();
             $("#btnStart").disabled = true;
+            
         });
         this.socket.on("bad-access", data => {
             alert(data.msg);
@@ -107,6 +115,16 @@ class App {
             this.game.start();
             this.socket.emit("in-playing");
             document.querySelector("#btnStart").disabled = true;
+        });
+
+        this.socket.on("rank-list",data=> {
+            let rankList = $("#rankList");
+            rankList.innerHTML = "";
+            data.result.forEach((x, idx)=> {
+                let li = document.createElement("li");
+                li.innerHTML = `${idx+1}등 ${x.name} : ${x.win} 승, ${x.lose} 패`;
+                rankList.appendChild(li);
+            })
         });
 
     }
