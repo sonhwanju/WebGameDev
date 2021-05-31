@@ -1,6 +1,9 @@
 const WebSocket = require('ws');
 const port = 32000;
 
+const LoginHandler = require('./LoginHandler.js');
+const SocketState = require('./SocketState');
+
 let socketIdx = 0;
 let userList = {}; //로그인한 유저들을 관리하는 리스트
 let connectedSocket = {}; //연결된 소켓들을 관리
@@ -22,8 +25,12 @@ wsService.on("connection", socket => {
         console.log("소켓 끊김");
     });
     socket.on("message", msg => {
-        const {op,payload} = getPayLoad(msg);
-        console.log(op, payload);
-        socket.send(payload);
+        const data = JSON.parse(msg); //json파싱
+
+        if(data.type == "LOGIN") {
+            LoginHandler(data.payload,socket); //어떤 소켓이 어떤 페이로드를 보냈는가
+            return;
+        }
+         
     });
 });
