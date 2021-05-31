@@ -6,3 +6,4 @@ chatServer/node_modules
 chatServer/secret.js
 TETRIS/node_modules
 TETRIS/secret.js
+wsServer/node_modules
