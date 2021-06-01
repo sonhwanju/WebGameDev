@@ -21,16 +21,30 @@ const getPayLoad = str => {
 
 wsService.on("connection", socket => {
     console.log("소켓 연결");
+
+    socket.state = SocketState.IN_LOGIN; //로그인 대기상태
+    socket.id = socketIdx;
+    connectedSocket[socketIdx] = socket;
+    socketIdx++;
+
     socket.on("close", () => {
         console.log("소켓 끊김");
+        delete connectedSocket[socket.id];
+        delete userList[socket.id];
+        //이외에 연결 끊겼을 때 해줄 일을 여기다 적어줘야 한다.
     });
     socket.on("message", msg => {
-        const data = JSON.parse(msg); //json파싱
+        try {
+            const data = JSON.parse(msg); //json파싱
 
-        if(data.type == "LOGIN") {
-            LoginHandler(data.payload,socket); //어떤 소켓이 어떤 페이로드를 보냈는가
-            return;
-        }
-         
+            if(data.type == "LOGIN") {
+                let userData = LoginHandler(data.payload,socket); //어떤 소켓이 어떤 페이로드를 보냈는가
+                userList[socket.id] = userData;
+                return;
+            }
+        }catch(err) {
+            console.log(`잘못된 요청 발생 : ${msg}`);
+            console.log(err);
+        } 
     });
 });
