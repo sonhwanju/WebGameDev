@@ -32,6 +32,11 @@ wsService.on("connection", socket => {
         delete connectedSocket[socket.id];
         delete userList[socket.id];
         //이외에 연결 끊겼을 때 해줄 일을 여기다 적어줘야 한다.
+        wsService.clients.forEach(soc => {
+            if(soc.state !== SocketState.IN_GAME || soc.id === socket.id) return;
+
+            soc.send(JSON.stringify({type:"DISCONNECT", payload:socket.id}));
+        });
     });
     socket.on("message", msg => {
         try {
@@ -42,9 +47,33 @@ wsService.on("connection", socket => {
                 userList[socket.id] = userData;
                 return;
             }
+
+            if(data.type === "TRANSFORM") {
+                let transformVO = JSON.parse(data.payload);
+                if(userList[transformVO.socketId] !== undefined) {
+                    //userList를 갱신
+                    userList[transformVO.socketId].position = transformVO.position;
+                    userList[transformVO.socketId].rotation = transformVO.rotation;
+                    userList[transformVO.socketId].turretRotation = transformVO.turretRotation;
+                }
+            }
         }catch(err) {
             console.log(`잘못된 요청 발생 : ${msg}`);
             console.log(err);
         } 
     });
 });
+
+setInterval(()=> {
+    let keys = Object.keys(userList); //접속한 모든 소켓의 아이디가 배열로 나온다
+    let dataList = []; //전송할 배열을 만든다.
+    for(let i = 0; i <keys.length; i++) {
+        dataList.push(userList[keys[i]]);
+    }
+    //접속한 모든 클라이언트 소켓이 여기 들어가 있다.
+    wsService.clients.forEach(soc => {
+        if(soc.state != SocketState.IN_GAME) return;
+
+        soc.send(JSON.stringify({type:"REFRESH", payload:JSON.stringify({dataList}) }) );
+    });
+}, 200);
