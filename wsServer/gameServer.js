@@ -3,6 +3,7 @@ const port = 32000;
 
 const LoginHandler = require('./LoginHandler.js');
 const SocketState = require('./SocketState');
+const tankData = require('./GameData.js');
 
 let socketIdx = 0;
 let userList = {}; //로그인한 유저들을 관리하는 리스트
@@ -26,6 +27,8 @@ wsService.on("connection", socket => {
     socket.id = socketIdx;
     connectedSocket[socketIdx] = socket;
     socketIdx++;
+
+    socket.send(JSON.stringify({type:"INITDATA",payload: JSON.stringify(tankData) }) );
 
     socket.on("close", () => {
         console.log("소켓 끊김");
