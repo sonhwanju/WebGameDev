@@ -59,13 +59,29 @@ wsService.on("connection", socket => {
                     userList[transformVO.socketId].rotation = transformVO.rotation;
                     userList[transformVO.socketId].turretRotation = transformVO.turretRotation;
                 }
+                return;
             }
+            if(data.type=="FIRE" || data.type==="HIT" || data.type === "DEAD"|| data.type == "RESPAWN"){
+                //let fireInfo=JSON.parse(data.payload);
+                broadcast(msg,socket);
+                return;
+            }
+
         }catch(err) {
             console.log(`잘못된 요청 발생 : ${msg}`);
             console.log(err);
         } 
     });
 });
+
+function broadcast(msg, socket)
+{
+    wsService.clients.forEach(soc=>{
+        if(soc.state!=SocketState.IN_GAME || soc.id==socket.id) return;
+
+        soc.send(msg);
+    });
+}
 
 setInterval(()=> {
     let keys = Object.keys(userList); //접속한 모든 소켓의 아이디가 배열로 나온다
