@@ -47,6 +47,8 @@ wsService.on("connection", socket => {
 
             if(data.type == "LOGIN") {
                 let userData = LoginHandler(data.payload,socket); //어떤 소켓이 어떤 페이로드를 보냈는가
+                userData.kill = 0;
+                userData.death = 0;
                 userList[socket.id] = userData;
                 return;
             }
@@ -61,10 +63,17 @@ wsService.on("connection", socket => {
                 }
                 return;
             }
-            if(data.type=="FIRE" || data.type==="HIT" || data.type === "DEAD"|| data.type == "RESPAWN"){
+            if(data.type=="FIRE" || data.type==="HIT" || data.type == "RESPAWN"){
                 //let fireInfo=JSON.parse(data.payload);
                 broadcast(msg,socket);
                 return;
+            }
+            if(data.type === "DEAD") {
+                let deadVO = JSON.parse(data.payload);
+                userList[deadVO.socketId].death++;
+                userList[deadVO.killerId].kill++;
+
+                broadcast(msg,socket);
             }
 
         }catch(err) {
