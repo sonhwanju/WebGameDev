@@ -1,5 +1,6 @@
 //실행법
 //node 스크립트이름 웹툰이름 몇화부터시작하는지 몇화까지하는지
+//띄어쓰기 X
 
 const request = require('request');
 const cheerio = require('cheerio');

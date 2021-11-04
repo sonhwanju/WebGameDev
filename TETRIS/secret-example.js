@@ -1,6 +1,6 @@
 const connectionData = {
     host:"",
-    usser:"",
+    user:"",
     password:"",
     database:"",
     waitForConnections:true,
